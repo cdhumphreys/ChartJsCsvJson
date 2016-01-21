@@ -4,6 +4,10 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+// Chart.defaults.global.responsive = false;
+// Chart.defaults.global.showScale = true;
+// Chart.defaults.global.legendTemplate = "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label\%%><%}%></li><%}%></ul>"
+
 var database = {};
 var keys = [];
 
@@ -42,17 +46,17 @@ var jsonpCallback = function(data) {
 		
 		
 		for (var i=0; i < len; i++) {
+			var red = getRandomInt(),
+				green = getRandomInt(),
+				blue = getRandomInt();
 
 			var rowEntry = database[i];	
 			var entry = {
 
 				label: rowEntry.campaign,
-				// fillColor: "rgba(220,220,220,0.2)",
-	   //          strokeColor: "rgba(220,220,220,1)",
-	   //          pointColor: "rgba(220,220,220,1)",
-	   //          pointStrokeColor: "#fff",
-	   //          pointHighlightFill: "#fff",
-	   //          pointHighlightStroke: "rgba(220,220,220,1)",
+				strokeColor: "rgba(" + red + "," + green + "," + blue + ",1)",
+	            pointColor: "rgba(" + red + "," + green + "," + blue + ",1)",
+	            pointHighlightStroke: "rgba(" + red + "," + green + "," + blue + ",1)",
 	            data: []
 
 			};
@@ -63,6 +67,7 @@ var jsonpCallback = function(data) {
 					entry.data.push(parseFloat(rowEntry[key]));
 				}
 			}	
+
 			graphData.datasets.push(entry);
 		}
 	};
@@ -72,10 +77,20 @@ var jsonpCallback = function(data) {
 		datasets: []
 	};
 	fillGraphData();
-	var myChart = new Chart(ctx).Line(graphData);
+	
+	var myChart = new Chart(ctx).Line(graphData, {
+		multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>\%",
+		bezierCurve: false,
+		datasetFill : false,
+	});
+
+
 };
 
-
+var getRandomInt = function() {
+	var number = (Math.random()*255).toFixed(0);
+	return number;
+};
 
 
 // Finds number of entries in database collection of objects
@@ -89,7 +104,7 @@ var objectLength = function(object) {
     return length;
 };
 
-// Data has to be in the following form to work with ChartJS
+// Data has to be in the following form to work with ChartJS Line graph
 // var data = {
 //     labels: ["January", "February", "March", "April", "May", "June", "July"],
 //     datasets: [
@@ -116,7 +131,6 @@ var objectLength = function(object) {
 //     ]
 // };
 
-// Data for ChartJS
 
 
 
