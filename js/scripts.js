@@ -4,10 +4,6 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-// Chart.defaults.global.responsive = false;
-// Chart.defaults.global.showScale = true;
-// Chart.defaults.global.legendTemplate = "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label\%%><%}%></li><%}%></ul>"
-
 var database = {};
 var keys = [];
 
@@ -38,7 +34,6 @@ var jsonpCallback = function(data) {
 			database[i][keys[j]] = data.feed.entry[i]['gsx$' + keys[j]]['$t'];
 		}
 	}
-	// console.table(database);
 	// Fills in graphData object with properly organised data and labels
 	var fillGraphData = function() {
 		var len = objectLength(database);
@@ -61,7 +56,6 @@ var jsonpCallback = function(data) {
 
 			};
 			for (var key in rowEntry) {
-				// console.log(key);
 				if (percentagesKey.indexOf(key) !== -1) {
 							
 					entry.data.push(parseFloat(rowEntry[key]));
